@@ -14,112 +14,112 @@ import org.junit.Test;
 
 public class WordCountTest {
 
-  /*
-   * Declare harnesses that let you test a mapper, a reducer, and
-   * a mapper and a reducer working together.
-   */
-  MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
-  ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
-  MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
+    /*
+     * Declare harnesses that let you test a mapper, a reducer, and
+     * a mapper and a reducer working together.
+     */
+    MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
+    ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
+    MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
 
-  /*
-   * Set up the test. This method will be called before every test.
-   */
-  @Before
-  public void setUp() {
+    /*
+     * Set up the test. This method will be called before every test.
+     */
+    @Before
+    public void setUp() {
 
     /*
      * Set up the mapper test harness.
      */
-    WordMapper mapper = new WordMapper();
-    mapDriver = new MapDriver<LongWritable, Text, Text, IntWritable>();
-    mapDriver.setMapper(mapper);
+        WordMapper mapper = new WordMapper();
+        mapDriver = new MapDriver<LongWritable, Text, Text, IntWritable>();
+        mapDriver.setMapper(mapper);
 
     /*
      * Set up the reducer test harness.
      */
-    SumReducer reducer = new SumReducer();
-    reduceDriver = new ReduceDriver<Text, IntWritable, Text, IntWritable>();
-    reduceDriver.setReducer(reducer);
+        SumReducer reducer = new SumReducer();
+        reduceDriver = new ReduceDriver<Text, IntWritable, Text, IntWritable>();
+        reduceDriver.setReducer(reducer);
 
     /*
      * Set up the mapper/reducer test harness.
      */
-    mapReduceDriver = new MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable>();
-    mapReduceDriver.setMapper(mapper);
-    mapReduceDriver.setReducer(reducer);
-  }
+        mapReduceDriver = new MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable>();
+        mapReduceDriver.setMapper(mapper);
+        mapReduceDriver.setReducer(reducer);
+    }
 
-  /*
-   * Test the mapper.
-   */
-  @Test
-  public void testMapper() {
+    /*
+     * Test the mapper.
+     */
+    @Test
+    public void testMapper() {
 
     /*
      * For this test, the mapper's input will be "1 cat cat dog" 
      */
-    mapDriver.withInput(new LongWritable(1), new Text("cat cat dog"));
+        mapDriver.withInput(new LongWritable(1), new Text("cat cat dog"));
 
     /*
      * The expected output is "cat 1", "cat 1", and "dog 1".
      */
-    mapDriver.withOutput(new Text("cat"), new IntWritable(1));
-    mapDriver.withOutput(new Text("cat"), new IntWritable(1));
-    mapDriver.withOutput(new Text("dog"), new IntWritable(1));
+        mapDriver.withOutput(new Text("cat"), new IntWritable(1));
+        mapDriver.withOutput(new Text("cat"), new IntWritable(1));
+        mapDriver.withOutput(new Text("dog"), new IntWritable(1));
 
     /*
      * Run the test.
      */
-    mapDriver.runTest();
-  }
+        mapDriver.runTest();
+    }
 
-  /*
-   * Test the reducer.
-   */
-  @Test
-  public void testReducer() {
+    /*
+     * Test the reducer.
+     */
+    @Test
+    public void testReducer() {
 
-    List<IntWritable> values = new ArrayList<IntWritable>();
-    values.add(new IntWritable(1));
-    values.add(new IntWritable(1));
+        List<IntWritable> values = new ArrayList<IntWritable>();
+        values.add(new IntWritable(1));
+        values.add(new IntWritable(1));
 
     /*
      * For this test, the reducer's input will be "cat 1 1".
      */
-    reduceDriver.withInput(new Text("cat"), values);
+        reduceDriver.withInput(new Text("cat"), values);
 
     /*
      * The expected output is "cat 2"
      */
-    reduceDriver.withOutput(new Text("cat"), new IntWritable(2));
+        reduceDriver.withOutput(new Text("cat"), new IntWritable(2));
 
     /*
      * Run the test.
      */
-    reduceDriver.runTest();
-  }
+        reduceDriver.runTest();
+    }
 
-  /*
-   * Test the mapper and reducer working together.
-   */
-  @Test
-  public void testMapReduce() {
+    /*
+     * Test the mapper and reducer working together.
+     */
+    @Test
+    public void testMapReduce() {
 
     /*
      * For this test, the mapper's input will be "1 cat cat dog" 
      */
-    mapReduceDriver.withInput(new LongWritable(1), new Text("cat cat dog"));
+        mapReduceDriver.withInput(new LongWritable(1), new Text("cat cat dog"));
 
     /*
      * The expected output (from the reducer) is "cat 2", "dog 1". 
      */
-    mapReduceDriver.addOutput(new Text("cat"), new IntWritable(2));
-    mapReduceDriver.addOutput(new Text("dog"), new IntWritable(1));
+        mapReduceDriver.addOutput(new Text("cat"), new IntWritable(2));
+        mapReduceDriver.addOutput(new Text("dog"), new IntWritable(1));
 
     /*
      * Run the test.
      */
-    mapReduceDriver.runTest();
-  }
+        mapReduceDriver.runTest();
+    }
 }
