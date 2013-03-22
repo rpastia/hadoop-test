@@ -1,3 +1,5 @@
+package com.avira;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestWordCount {
+public class WordCountTest {
 
   /*
    * Declare harnesses that let you test a mapper, a reducer, and
